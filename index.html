@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#f8f0e1">
+    <meta name="theme-color" content="#0a0d08">
     <title>TEMBEH — Cinematic Folk</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Rye&family=Special+Elite&family=Lora:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Rye&family=Special+Elite&family=Lora:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&display=swap" rel="stylesheet">
     <style>
-        /* ===== RESET & BASE ===== */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
@@ -22,202 +21,143 @@
             --green-light: #5a7a52;
             --cream: #f5edd6;
             --cream-dark: #e8dcc4;
-            --paper: #efe6d0;
         }
 
-        html {
-            overflow-x: hidden;
-        }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
             font-family: 'Lora', Georgia, serif;
-            background: #f8f0e1;
-            color: var(--brown-dark);
-            position: relative;
-            overflow-x: hidden;
+            background: #0a0d08;
+            color: var(--cream);
             margin: 0;
-            padding: 0;
+            overflow-x: hidden;
         }
 
-        /* Paper texture as fixed layer behind everything */
-        .paper-bg {
-            position: fixed;
-            top: -50px;
-            left: -50px;
-            right: -50px;
-            bottom: -50px;
-            z-index: 0;
-            background: #f8f0e1 url('images/paper-bg.jpg') center/cover no-repeat;
-        }
-
-        /* ===== GRAIN OVERLAY ===== */
+        /* Grain overlay */
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            inset: 0;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.08;
+            opacity: 0.06;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 200px 200px;
         }
 
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 9998;
-            background: radial-gradient(ellipse at center, transparent 50%, rgba(58, 42, 26, 0.12) 100%);
-        }
-
-        /* ===== STICKER ELEMENTS ===== */
-        .sticker {
-            position: absolute;
-            pointer-events: none;
-            z-index: 10;
-            filter: drop-shadow(2px 3px 6px rgba(58, 42, 26, 0.2));
-        }
-
-        /* ===== HERO SECTION ===== */
+        /* ===== HERO — full-screen parallax image ===== */
         .hero {
-            min-height: 100vh;
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            padding-top: env(safe-area-inset-top, 2rem);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            background: transparent;
-            margin-top: 0;
+            justify-content: flex-end;
+            padding-bottom: 6vh;
         }
 
-        .hero-stars {
-            font-family: 'Special Elite', cursive;
-            font-size: 1.4rem;
-            color: var(--brown-mid);
-            letter-spacing: 0.8em;
-            margin-bottom: 0.5rem;
+        .hero-bg {
+            position: absolute;
+            top: -15%;
+            left: 0;
+            width: 100%;
+            height: 130%;
+            background: url('images/tembeh-main.png') center top / cover no-repeat;
+            filter: grayscale(1) contrast(1.1) brightness(0.9);
+            will-change: transform;
+            z-index: 0;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(10,13,8,0.85) 70%, #0a0d08 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
         }
 
         .hero-title {
-            font-family: 'Rye', 'Abril Fatface', cursive;
-            font-size: clamp(5rem, 15vw, 14rem);
-            color: var(--green-dark);
+            font-family: 'Rye', cursive;
+            font-size: clamp(4rem, 14vw, 12rem);
+            color: #fff;
             line-height: 0.85;
-            letter-spacing: 0.03em;
-            text-shadow: 3px 3px 0 rgba(196, 162, 101, 0.3);
-            margin-bottom: 0.3rem;
+            letter-spacing: 0.04em;
+            text-shadow: 0 4px 40px rgba(0,0,0,0.6);
         }
 
         .hero-subtitle {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: clamp(1.2rem, 3vw, 2.2rem);
-            color: var(--brown);
-            letter-spacing: 0.15em;
-            margin-bottom: 1rem;
-        }
-
-        .hero-tagline {
-            font-family: 'Special Elite', cursive;
-            font-size: clamp(0.8rem, 1.5vw, 1.1rem);
-            color: var(--brown-mid);
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-
-        .hero-divider {
-            width: 120px;
-            height: 2px;
-            background: var(--brown-mid);
-            margin: 0 auto 1.5rem;
-            position: relative;
-        }
-        .hero-divider::before {
-            content: '✦';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: transparent;
-            padding: 0 0.5rem;
-            color: var(--brown-mid);
-            font-size: 0.9rem;
-        }
-
-        .hero-for-fans {
-            font-family: 'Lora', serif;
-            font-style: italic;
-            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
-            color: var(--green);
-            max-width: 500px;
-            line-height: 1.6;
-        }
-
-        /* ===== HERO IMAGE ===== */
-        .hero-image-wrap {
-            position: relative;
-            display: inline-block;
-            margin-top: 2.5rem;
-        }
-
-        .hero-image {
-            width: clamp(280px, 40vw, 500px);
-            filter: contrast(1.05) brightness(0.98);
-            border: 6px solid var(--cream-dark);
-            box-shadow: 0 8px 40px rgba(58, 42, 26, 0.25);
-            display: block;
-        }
-
-        .hero-flower-left {
-            position: absolute;
-            left: -25%;
-            bottom: -5%;
-            width: clamp(80px, 12vw, 160px);
-            transform: rotate(-8deg);
-            opacity: 0.85;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .hero-flower-right {
-            position: absolute;
-            right: -25%;
-            bottom: -8%;
-            width: clamp(80px, 12vw, 160px);
-            transform: scaleX(-1) rotate(6deg);
-            opacity: 0.85;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .hero-image-caption {
-            font-family: 'Special Elite', cursive;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--brown-mid);
-            margin-top: 1rem;
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            color: var(--brown-light);
             letter-spacing: 0.2em;
+            margin-top: 0.5rem;
         }
 
-        /* ===== SECTION STYLES ===== */
-        section {
+        .scroll-hint {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.7rem;
+            color: rgba(245, 237, 214, 0.4);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: bob 2s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(6px); }
+        }
+
+        /* ===== SHOWS SECTION — parallax bg ===== */
+        .shows {
             position: relative;
             padding: 5rem 2rem;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .shows-bg {
+            position: absolute;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            background: url('images/tembeh-main.png') center / cover no-repeat;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        .shows-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 13, 8, 0.82);
             z-index: 1;
+        }
+
+        .shows > *:not(.shows-bg):not(.shows-overlay) {
+            position: relative;
+            z-index: 2;
         }
 
         .section-ornament {
             text-align: center;
             font-size: 1.2rem;
-            color: var(--brown-mid);
+            color: var(--brown-light);
             letter-spacing: 1em;
             margin-bottom: 1rem;
         }
@@ -225,7 +165,7 @@
         .section-title {
             font-family: 'Abril Fatface', serif;
             font-size: clamp(2.5rem, 6vw, 5rem);
-            color: var(--green-dark);
+            color: var(--cream);
             text-align: center;
             margin-bottom: 0.5rem;
             line-height: 1;
@@ -235,50 +175,12 @@
             font-family: 'Playfair Display', serif;
             font-style: italic;
             font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--brown);
+            color: var(--brown-light);
             text-align: center;
             margin-bottom: 3rem;
         }
 
-        /* ===== SHOWS SECTION ===== */
-        .shows {
-            border-top: 2px solid var(--brown-light);
-            border-bottom: 2px solid var(--brown-light);
-            color: var(--cream);
-            position: relative;
-            z-index: 2;
-            overflow: hidden;
-        }
-
-        .shows-bg {
-            position: absolute;
-            top: -50%;
-            left: 0;
-            width: 100%;
-            height: 200%;
-            background: url('images/tembeh-main.png') center/cover no-repeat;
-            z-index: 0;
-            will-change: transform;
-        }
-
-        .shows-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(20, 25, 18, 0.75);
-            z-index: 1;
-        }
-
-        .shows > *:not(.shows-bg):not(.shows-overlay) {
-            position: relative;
-            z-index: 2;
-        }
-
-        .shows .section-title,
-        .shows .section-subtitle,
-        .shows .section-ornament {
-            color: var(--cream);
-        }
-
+        /* ===== SHOW ITEMS ===== */
         .shows-timeline {
             max-width: 900px;
             margin: 0 auto;
@@ -291,7 +193,6 @@
             align-items: center;
             padding: 2.5rem 2rem;
             border-top: 1px solid rgba(245, 237, 214, 0.15);
-            position: relative;
             transition: background 0.3s ease;
         }
 
@@ -303,10 +204,7 @@
             background: rgba(245, 237, 214, 0.05);
         }
 
-        .show-date-block {
-            text-align: center;
-            position: relative;
-        }
+        .show-date-block { text-align: center; position: relative; }
 
         .show-day {
             font-family: 'Abril Fatface', serif;
@@ -385,28 +283,12 @@
             color: var(--green-dark);
         }
 
-        .sticker-shows-wildflower {
-            top: -30px;
-            left: 5%;
-            width: clamp(70px, 9vw, 120px);
-            transform: rotate(-12deg);
-            opacity: 0.75;
-        }
-
-        .sticker-shows-boot {
-            bottom: -20px;
-            right: 8%;
-            width: clamp(60px, 8vw, 110px);
-            transform: rotate(30deg) scaleX(-1);
-            opacity: 0.75;
-        }
-
-        /* ===== FEATURED EVENT ===== */
+        /* Featured show */
         .show-item.featured {
             background: rgba(245, 237, 214, 0.06);
             border: 1px solid rgba(245, 237, 214, 0.2);
             border-radius: 2px;
-            padding: 2.5rem 2rem 2.5rem 2rem;
+            padding: 2.5rem 2rem;
             position: relative;
         }
 
@@ -435,9 +317,7 @@
             opacity: 0.8;
         }
 
-        .show-item.featured .show-name {
-            font-size: 1.9rem;
-        }
+        .show-item.featured .show-name { font-size: 1.9rem; }
 
         .show-item.featured .show-ticket-link {
             background: rgba(93, 122, 82, 0.25);
@@ -446,146 +326,15 @@
             font-size: 0.9rem;
         }
 
-        /* ===== ABOUT / QUOTE STRIP ===== */
-        .quote-strip {
-            background: var(--green-dark);
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .quote-strip::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            opacity: 0.06;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-size: 200px 200px;
-        }
-
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: clamp(1.3rem, 3vw, 2.2rem);
-            color: var(--cream);
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-            position: relative;
-        }
-
-        .quote-text::before {
-            content: '"';
-            font-family: 'Abril Fatface', serif;
-            font-size: 4rem;
-            color: var(--brown-light);
-            position: absolute;
-            top: -1.5rem;
-            left: -1.5rem;
-            opacity: 0.5;
-        }
-
-        .quote-attr {
-            font-family: 'Special Elite', cursive;
-            color: var(--brown-light);
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            letter-spacing: 0.2em;
-            position: relative;
-        }
-
-        /* ===== CONTACT SECTION ===== */
-        .contact {
-            text-align: center;
-        }
-
-        .contact-form {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: 'Special Elite', cursive;
-            font-size: 0.85rem;
-            color: var(--brown);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 0.4rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            font-family: 'Lora', serif;
-            font-size: 1rem;
-            color: var(--brown-dark);
-            background: var(--paper);
-            border: 1.5px solid var(--cream-dark);
-            border-radius: 0;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--green);
-        }
-
-        .form-group textarea {
-            min-height: 140px;
-            resize: vertical;
-        }
-
-        .form-submit {
-            font-family: 'Rye', cursive;
-            font-size: 1rem;
-            color: var(--cream);
-            background: var(--green-dark);
-            border: 2px solid var(--green-dark);
-            padding: 0.8rem 2.5rem;
-            cursor: pointer;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-        }
-
-        .form-submit:hover {
-            background: transparent;
-            color: var(--green-dark);
-        }
-
-        .sticker-contact-wildflower {
-            bottom: 5%;
-            right: 3%;
-            width: clamp(80px, 10vw, 140px);
-            transform: rotate(18deg);
-            opacity: 0.7;
-        }
-
-        .sticker-contact-boot {
-            top: 10%;
-            left: 3%;
-            width: clamp(60px, 7vw, 100px);
-            transform: rotate(-15deg);
-            opacity: 0.65;
-        }
-
         /* ===== FOOTER ===== */
         footer {
-            background: var(--brown-dark);
+            background: #0a0d08;
+            border-top: 1px solid rgba(245, 237, 214, 0.1);
             color: var(--cream-dark);
             text-align: center;
             padding: 3rem 2rem;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .footer-name {
@@ -621,9 +370,7 @@
             transition: border-color 0.3s;
         }
 
-        .footer-socials a:hover {
-            border-bottom-color: var(--brown-light);
-        }
+        .footer-socials a:hover { border-bottom-color: var(--brown-light); }
 
         .footer-copy {
             font-size: 0.75rem;
@@ -646,255 +393,8 @@
             transition: color 0.3s;
         }
 
-        .footer-legal a:hover {
-            color: var(--cream);
-        }
+        .footer-legal a:hover { color: var(--cream); }
 
-        .consent-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-        }
-
-        .consent-group input[type="checkbox"] {
-            margin-top: 0.25rem;
-            accent-color: var(--green);
-            flex-shrink: 0;
-        }
-
-        .consent-group label {
-            font-family: 'Lora', serif;
-            font-size: 0.8rem;
-            color: var(--brown);
-            line-height: 1.5;
-        }
-
-        .consent-group label a {
-            color: var(--green);
-            text-decoration: underline;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .sticker { display: none; }
-
-            section { padding: 3rem 1rem; }
-
-            .hero {
-                padding: 2rem 1rem;
-                min-height: auto;
-            }
-
-            .hero-title {
-                font-size: clamp(3.5rem, 18vw, 5rem);
-            }
-
-            .hero-stars {
-                font-size: 1rem;
-                letter-spacing: 0.4em;
-            }
-
-            .hero-tagline {
-                letter-spacing: 0.15em;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-for-fans {
-                font-size: 0.95rem;
-                padding: 0 0.5rem;
-            }
-
-            .hero-image-wrap {
-                margin-top: 1.5rem;
-                width: 100%;
-                max-width: 320px;
-            }
-
-            .hero-image {
-                width: 100%;
-                border-width: 4px;
-            }
-
-            .hero-image-wrap {
-                overflow: visible;
-            }
-
-            .hero-flower-left {
-                left: -10%;
-                width: 60px;
-            }
-
-            .hero-flower-right {
-                right: -10%;
-                width: 60px;
-            }
-
-            .hero-image-caption {
-                font-size: 0.75rem;
-                letter-spacing: 0.1em;
-            }
-
-            .section-title {
-                font-size: clamp(2rem, 8vw, 3rem);
-            }
-
-            .section-subtitle {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .show-item {
-                grid-template-columns: 70px 1fr;
-                gap: 0.8rem;
-                padding: 1.5rem 1rem;
-            }
-
-            .show-item.featured {
-                padding: 1.5rem 1rem;
-                padding-top: 2.5rem;
-            }
-
-            .show-ticket-link {
-                grid-column: 1 / -1;
-                text-align: center;
-                margin-top: 0.8rem;
-                padding: 0.7rem 1.5rem;
-            }
-
-            .show-item.featured .show-ticket-link {
-                grid-column: 1 / -1;
-                text-align: center;
-            }
-
-            .show-day {
-                font-size: 2.2rem;
-            }
-
-            .show-month {
-                font-size: 0.8rem;
-            }
-
-            .show-date-dot {
-                display: none;
-            }
-
-            .show-name {
-                font-size: 1.2rem;
-            }
-
-            .show-item.featured .show-name {
-                font-size: 1.3rem;
-            }
-
-            .show-venue-line {
-                font-size: 0.8rem;
-            }
-
-            .show-description {
-                font-size: 0.8rem;
-            }
-
-            .featured-badge {
-                top: 0.5rem;
-                right: 0.5rem;
-                font-size: 0.6rem;
-                padding: 0.2rem 0.6rem;
-            }
-
-            .featured-limited {
-                font-size: 0.65rem;
-            }
-
-            /* Quote strip mobile */
-            .quote-text {
-                font-size: 1.1rem;
-            }
-
-            .quote-text::before {
-                font-size: 2.5rem;
-                top: -1rem;
-                left: -0.5rem;
-            }
-
-            /* Contact form mobile */
-            .contact-form {
-                max-width: 100%;
-            }
-
-            .form-submit {
-                width: 100%;
-                padding: 0.9rem;
-            }
-
-            /* Footer mobile */
-            .footer-socials {
-                flex-wrap: wrap;
-                gap: 1rem 1.5rem;
-            }
-
-            .footer-legal {
-                flex-wrap: wrap;
-                gap: 0.8rem;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .sticker {
-                transform: scale(0.8);
-            }
-        }
-
-        /* ===== SMOOTH SCROLL ===== */
-        html { scroll-behavior: smooth; }
-
-        /* ===== TICKER / MARQUEE STRIP ===== */
-        .marquee-strip {
-            background: var(--brown-dark);
-            overflow: hidden;
-            padding: 0.6rem 0;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 25s linear infinite;
-            font-family: 'Special Elite', cursive;
-            font-size: 0.8rem;
-            color: var(--cream-dark);
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* ===== NAV STARS ===== */
-        .star { color: var(--brown-mid); }
-
-        /* ===== ANNOUNCEMENT BANNER ===== */
-        .announcement {
-            background: var(--green);
-            text-align: center;
-            padding: 0.8rem 2rem;
-        }
-
-        .announcement p {
-            font-family: 'Special Elite', cursive;
-            color: var(--cream);
-            font-size: 0.85rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .announcement a {
-            color: var(--brown-light);
-            text-decoration: underline;
-        }
         /* ===== NEWSLETTER POPUP ===== */
         .popup-backdrop {
             position: fixed;
@@ -946,9 +446,7 @@
             transition: opacity 0.2s;
         }
 
-        .popup-close:hover {
-            opacity: 1;
-        }
+        .popup-close:hover { opacity: 1; }
 
         .popup-ornament {
             font-size: 0.9rem;
@@ -992,9 +490,7 @@
             transition: border-color 0.3s;
         }
 
-        .popup-form input:focus {
-            border-color: var(--green);
-        }
+        .popup-form input:focus { border-color: var(--green); }
 
         .popup-form button {
             font-family: 'Special Elite', cursive;
@@ -1036,9 +532,7 @@
             line-height: 1.4;
         }
 
-        .popup-consent label a {
-            color: var(--green);
-        }
+        .popup-consent label a { color: var(--green); }
 
         .popup-success {
             font-family: 'Playfair Display', serif;
@@ -1048,21 +542,66 @@
             display: none;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .popup {
-                padding: 2rem 1.5rem;
-                max-width: 340px;
+            .hero { padding-bottom: 4vh; }
+
+            .hero-title { font-size: clamp(3.5rem, 18vw, 5rem); }
+
+            .shows { padding: 3rem 1rem; }
+
+            .section-title { font-size: clamp(2rem, 8vw, 3rem); }
+            .section-subtitle { font-size: 1rem; margin-bottom: 2rem; }
+
+            .show-item {
+                grid-template-columns: 70px 1fr;
+                gap: 0.8rem;
+                padding: 1.5rem 1rem;
             }
-            .popup-title {
-                font-size: 1.3rem;
+
+            .show-item.featured {
+                padding: 1.5rem 1rem;
+                padding-top: 2.5rem;
             }
+
+            .show-ticket-link {
+                grid-column: 1 / -1;
+                text-align: center;
+                margin-top: 0.8rem;
+                padding: 0.7rem 1.5rem;
+            }
+
+            .show-item.featured .show-ticket-link {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+
+            .show-day { font-size: 2.2rem; }
+            .show-month { font-size: 0.8rem; }
+            .show-date-dot { display: none; }
+            .show-name { font-size: 1.2rem; }
+            .show-item.featured .show-name { font-size: 1.3rem; }
+            .show-venue-line { font-size: 0.8rem; }
+            .show-description { font-size: 0.8rem; }
+
+            .featured-badge {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.6rem;
+                padding: 0.2rem 0.6rem;
+            }
+
+            .featured-limited { font-size: 0.65rem; }
+
+            .footer-socials { flex-wrap: wrap; gap: 1rem 1.5rem; }
+            .footer-legal { flex-wrap: wrap; gap: 0.8rem; }
+
+            .popup { padding: 2rem 1.5rem; max-width: 340px; }
+            .popup-title { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Paper texture background -->
-    <div class="paper-bg"></div>
 
     <!-- NEWSLETTER POPUP -->
     <div class="popup-backdrop" id="newsletterPopup">
@@ -1084,20 +623,15 @@
         </div>
     </div>
 
-    <!-- HERO -->
+    <!-- HERO — full-screen B&W image with name -->
     <section class="hero">
-        <div class="hero-stars">✦ ✦ ✦</div>
-        <h1 class="hero-title">TEMBEH</h1>
-        <p class="hero-tagline">Cinematic Folk</p>
-        <p class="hero-for-fans">
-            For the ones who still believe a song can hold the whole sky open.
-        </p>
-        <div class="hero-image-wrap">
-            <img src="images/wildflower-hero-left.png" alt="" class="hero-flower-left">
-            <img src="images/tembeh-main.png" alt="Tembeh performing live" class="hero-image">
-            <img src="images/wildflower-hero-right.png" alt="" class="hero-flower-right">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-fade"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">TEMBEH</h1>
+            <p class="hero-subtitle">cinematic folk</p>
         </div>
-        <p class="hero-image-caption">✦ one voice, one guitar, one room ✦</p>
+        <span class="scroll-hint">scroll</span>
     </section>
 
     <!-- UPCOMING SHOWS -->
@@ -1158,30 +692,6 @@
         </div>
     </section>
 
-    <!-- NEWSLETTER / STAY CLOSE -->
-    <section class="contact" id="newsletter">
-        <div class="section-ornament">— ✦ —</div>
-        <h2 class="section-title">Stay Close</h2>
-        <p class="section-subtitle">shows, new songs, and stories from the road</p>
-
-        <form class="contact-form" id="siteNewsletterForm">
-            <div class="form-group">
-                <label for="nl-name">Your Name</label>
-                <input type="text" id="nl-name" name="name" placeholder="e.g. Woody Guthrie" required>
-            </div>
-            <div class="form-group">
-                <label for="nl-email">Your Email</label>
-                <input type="email" id="nl-email" name="email" placeholder="woody@dustbowl.com" required>
-            </div>
-            <div class="consent-group">
-                <input type="checkbox" id="nl-consent" name="consent" required>
-                <label for="nl-consent">I agree to the <a href="privacy.html">Privacy Policy</a>. I can unsubscribe at any time.</label>
-            </div>
-            <button type="submit" class="form-submit">Join the Circle</button>
-        </form>
-        <p id="siteSuccess" style="display:none; font-family:'Playfair Display',serif; font-style:italic; font-size:1.1rem; color:var(--green); margin-top:1.5rem;">You're in. See you on the road. ✦</p>
-    </section>
-
     <!-- FOOTER -->
     <footer>
         <p class="footer-name">TEMBEH</p>
@@ -1200,34 +710,37 @@
     </footer>
 
     <script>
-    // Parallax effect for shows background
+    // Hero parallax
     (function() {
-        const showsBg = document.getElementById('showsBg');
-        const shows = document.getElementById('shows');
-
-        function updateParallax() {
-            const rect = shows.getBoundingClientRect();
-            const windowH = window.innerHeight;
-            // Only update when section is in view
-            if (rect.bottom > 0 && rect.top < windowH) {
-                const progress = (windowH - rect.top) / (windowH + rect.height);
-                const offset = (progress - 0.5) * 30;
-                showsBg.style.transform = 'translate3d(0,' + offset + '%,0)';
-            }
-        }
-
-        window.addEventListener('scroll', updateParallax, { passive: true });
-        updateParallax();
+        var heroBg = document.getElementById('heroBg');
+        window.addEventListener('scroll', function() {
+            var y = window.scrollY;
+            heroBg.style.transform = 'translate3d(0,' + (y * 0.4) + 'px,0)';
+        }, { passive: true });
     })();
 
+    // Shows parallax
     (function() {
-        const STORAGE_KEY = 'tembeh_subscribed';
-        const popup = document.getElementById('newsletterPopup');
-        const popupClose = document.getElementById('popupClose');
-        const popupForm = document.getElementById('popupForm');
-        const popupSuccess = document.getElementById('popupSuccess');
-        const siteForm = document.getElementById('siteNewsletterForm');
-        const siteSuccess = document.getElementById('siteSuccess');
+        var showsBg = document.getElementById('showsBg');
+        var shows = document.getElementById('shows');
+        window.addEventListener('scroll', function() {
+            var rect = shows.getBoundingClientRect();
+            var windowH = window.innerHeight;
+            if (rect.bottom > 0 && rect.top < windowH) {
+                var progress = (windowH - rect.top) / (windowH + rect.height);
+                var offset = (progress - 0.5) * 30;
+                showsBg.style.transform = 'translate3d(0,' + offset + '%,0)';
+            }
+        }, { passive: true });
+    })();
+
+    // Newsletter popup
+    (function() {
+        var STORAGE_KEY = 'tembeh_subscribed';
+        var popup = document.getElementById('newsletterPopup');
+        var popupClose = document.getElementById('popupClose');
+        var popupForm = document.getElementById('popupForm');
+        var popupSuccess = document.getElementById('popupSuccess');
 
         function isSubscribed() {
             return localStorage.getItem(STORAGE_KEY) === 'true';
@@ -1237,47 +750,30 @@
             localStorage.setItem(STORAGE_KEY, 'true');
         }
 
-        // Show popup after 4 seconds, only if not subscribed and not dismissed this session
         if (!isSubscribed()) {
-            setTimeout(() => {
+            setTimeout(function() {
                 popup.classList.add('visible');
             }, 4000);
         }
 
-        // Close popup
-        popupClose.addEventListener('click', () => {
+        popupClose.addEventListener('click', function() {
             popup.classList.remove('visible');
         });
 
-        // Close on backdrop click
-        popup.addEventListener('click', (e) => {
-            if (e.target === popup) {
-                popup.classList.remove('visible');
-            }
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) popup.classList.remove('visible');
         });
 
-        // Close on Escape
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') popup.classList.remove('visible');
         });
 
-        // Popup form submit
-        popupForm.addEventListener('submit', (e) => {
+        popupForm.addEventListener('submit', function(e) {
             e.preventDefault();
             markSubscribed();
             popupForm.style.display = 'none';
             popupSuccess.style.display = 'block';
-            setTimeout(() => popup.classList.remove('visible'), 2500);
-        });
-
-        // Site newsletter form submit
-        siteForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            markSubscribed();
-            siteForm.style.display = 'none';
-            siteSuccess.style.display = 'block';
-            // Also prevent popup from ever showing
-            popup.classList.remove('visible');
+            setTimeout(function() { popup.classList.remove('visible'); }, 2500);
         });
     })();
     </script>
