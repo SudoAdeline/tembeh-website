@@ -172,7 +172,7 @@
             right: -25%;
             bottom: -8%;
             width: clamp(80px, 12vw, 160px);
-            transform: rotate(6deg);
+            transform: scaleX(-1) rotate(6deg);
             opacity: 0.85;
             pointer-events: none;
             z-index: -1;
@@ -357,25 +357,6 @@
             opacity: 0.75;
         }
 
-        @media (max-width: 700px) {
-            .show-item {
-                grid-template-columns: 80px 1fr;
-                gap: 1rem;
-                padding: 1.5rem 1rem;
-            }
-            .show-ticket-link {
-                grid-column: 1 / -1;
-                text-align: center;
-                margin-top: 0.5rem;
-            }
-            .show-day {
-                font-size: 2.5rem;
-            }
-            .show-date-dot {
-                display: none;
-            }
-        }
-
         /* ===== FEATURED EVENT ===== */
         .show-item.featured {
             background: rgba(245, 237, 214, 0.06);
@@ -419,17 +400,6 @@
             border-color: rgba(245, 237, 214, 0.5);
             padding: 0.7rem 2.2rem;
             font-size: 0.9rem;
-        }
-
-        @media (max-width: 700px) {
-            .featured-badge {
-                top: 0.5rem;
-                right: 0.5rem;
-                font-size: 0.6rem;
-            }
-            .show-item.featured .show-name {
-                font-size: 1.4rem;
-            }
         }
 
         /* ===== ABOUT / QUOTE STRIP ===== */
@@ -664,14 +634,165 @@
         @media (max-width: 768px) {
             .sticker { display: none; }
 
-            .shows-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
+            section { padding: 3rem 1rem; }
+
+            .hero {
+                padding: 2rem 1rem;
+                min-height: auto;
             }
 
-            section { padding: 3rem 1.5rem; }
+            .hero-title {
+                font-size: clamp(3.5rem, 18vw, 5rem);
+            }
 
-            .hero { padding: 3rem 1rem; }
+            .hero-stars {
+                font-size: 1rem;
+                letter-spacing: 0.4em;
+            }
+
+            .hero-tagline {
+                letter-spacing: 0.15em;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-for-fans {
+                font-size: 0.95rem;
+                padding: 0 0.5rem;
+            }
+
+            .hero-image-wrap {
+                margin-top: 1.5rem;
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .hero-image {
+                width: 100%;
+                border-width: 4px;
+            }
+
+            .hero-flower-left {
+                left: -15%;
+                width: 70px;
+            }
+
+            .hero-flower-right {
+                right: -15%;
+                width: 70px;
+            }
+
+            .hero-image-caption {
+                font-size: 0.75rem;
+                letter-spacing: 0.1em;
+            }
+
+            /* Shows section mobile */
+            .shows {
+                background-attachment: scroll;
+            }
+
+            .section-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .show-item {
+                grid-template-columns: 70px 1fr;
+                gap: 0.8rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .show-item.featured {
+                padding: 1.5rem 1rem;
+                padding-top: 2.5rem;
+            }
+
+            .show-ticket-link {
+                grid-column: 1 / -1;
+                text-align: center;
+                margin-top: 0.8rem;
+                padding: 0.7rem 1.5rem;
+            }
+
+            .show-item.featured .show-ticket-link {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+
+            .show-day {
+                font-size: 2.2rem;
+            }
+
+            .show-month {
+                font-size: 0.8rem;
+            }
+
+            .show-date-dot {
+                display: none;
+            }
+
+            .show-name {
+                font-size: 1.2rem;
+            }
+
+            .show-item.featured .show-name {
+                font-size: 1.3rem;
+            }
+
+            .show-venue-line {
+                font-size: 0.8rem;
+            }
+
+            .show-description {
+                font-size: 0.8rem;
+            }
+
+            .featured-badge {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.6rem;
+                padding: 0.2rem 0.6rem;
+            }
+
+            .featured-limited {
+                font-size: 0.65rem;
+            }
+
+            /* Quote strip mobile */
+            .quote-text {
+                font-size: 1.1rem;
+            }
+
+            .quote-text::before {
+                font-size: 2.5rem;
+                top: -1rem;
+                left: -0.5rem;
+            }
+
+            /* Contact form mobile */
+            .contact-form {
+                max-width: 100%;
+            }
+
+            .form-submit {
+                width: 100%;
+                padding: 0.9rem;
+            }
+
+            /* Footer mobile */
+            .footer-socials {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+
+            .footer-legal {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {

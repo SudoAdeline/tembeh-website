@@ -239,30 +239,41 @@
             setTimeout(() => soundPrompt.classList.add('hidden'), 1000);
         }
 
-        // Check if autoplay started
+        // Initially hide the sound prompt until we know autoplay worked
+        soundPrompt.classList.add('hidden');
+
+        // Check if autoplay started (muted)
         video.addEventListener('playing', () => {
             tapToPlay.classList.add('hidden');
+            // Video is playing muted — show sound prompt
+            if (video.muted) {
+                soundPrompt.classList.remove('hidden');
+            }
         });
 
-        // If video hasn't started after a beat, show tap prompt
+        // If video hasn't started after a beat, show tap-to-play
         setTimeout(() => {
             if (video.paused) {
                 tapToPlay.classList.remove('hidden');
                 soundPrompt.classList.add('hidden');
             }
-        }, 500);
+        }, 800);
 
-        // Tap-to-play fallback (autoplay blocked)
+        // Tap-to-play fallback (autoplay fully blocked)
         tapToPlay.addEventListener('click', () => {
             tapToPlay.classList.add('hidden');
-            soundPrompt.classList.add('hidden');
             video.muted = false;
             video.currentTime = 0;
             video.play();
+            // Already unmuted, no need for sound prompt
+            soundPrompt.classList.add('hidden');
         });
 
         // Sound prompt click
-        soundPrompt.addEventListener('click', unmute);
+        soundPrompt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            unmute();
+        });
 
         // Show overlay when video ends
         video.addEventListener('ended', () => {
