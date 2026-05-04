@@ -193,6 +193,20 @@
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
+
+        @media (max-width: 768px) {
+            .sound-prompt {
+                bottom: 3rem;
+                padding: 0.8rem 1.8rem;
+                font-size: 0.9rem;
+                border-width: 2px;
+                border-color: rgba(245, 237, 214, 0.4);
+                background: rgba(10, 13, 8, 0.7);
+            }
+            .sound-icon {
+                font-size: 1.4rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -236,28 +250,30 @@
             video.muted = false;
             soundIcon.textContent = '🔊';
             soundText.textContent = 'Sound on';
-            setTimeout(() => soundPrompt.classList.add('hidden'), 1000);
+            setTimeout(() => soundPrompt.classList.add('hidden'), 1200);
         }
 
-        // Initially hide the sound prompt until we know autoplay worked
+        // Hide both initially
         soundPrompt.classList.add('hidden');
+        tapToPlay.classList.add('hidden');
 
-        // Check if autoplay started (muted)
-        video.addEventListener('playing', () => {
-            tapToPlay.classList.add('hidden');
-            // Video is playing muted — show sound prompt
-            if (video.muted) {
+        function checkState() {
+            if (!video.paused && video.muted) {
+                // Autoplaying muted — show sound prompt
+                tapToPlay.classList.add('hidden');
                 soundPrompt.classList.remove('hidden');
-            }
-        });
-
-        // If video hasn't started after a beat, show tap-to-play
-        setTimeout(() => {
-            if (video.paused) {
+            } else if (video.paused) {
+                // Autoplay blocked — show tap to play
                 tapToPlay.classList.remove('hidden');
                 soundPrompt.classList.add('hidden');
             }
-        }, 800);
+        }
+
+        // Check multiple times to catch all mobile timing quirks
+        setTimeout(checkState, 300);
+        setTimeout(checkState, 800);
+        setTimeout(checkState, 1500);
+        video.addEventListener('playing', checkState);
 
         // Tap-to-play fallback (autoplay fully blocked)
         tapToPlay.addEventListener('click', () => {
@@ -265,7 +281,6 @@
             video.muted = false;
             video.currentTime = 0;
             video.play();
-            // Already unmuted, no need for sound prompt
             soundPrompt.classList.add('hidden');
         });
 
