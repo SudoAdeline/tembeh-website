@@ -24,12 +24,17 @@
             --paper: #efe6d0;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Lora', Georgia, serif;
-            background: url('images/paper-bg.jpg') center/cover fixed;
+            background: url('images/paper-bg.jpg') center top / 100% auto repeat;
             color: var(--brown-dark);
             overflow-x: hidden;
             position: relative;
+            width: 100%;
         }
 
         /* ===== GRAIN OVERLAY ===== */
@@ -72,6 +77,7 @@
             text-align: center;
             padding: 2rem;
             position: relative;
+            overflow: hidden;
             background:
                 radial-gradient(ellipse at 20% 50%, rgba(93, 122, 82, 0.06) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 30%, rgba(196, 162, 101, 0.08) 0%, transparent 50%);
@@ -221,12 +227,26 @@
 
         /* ===== SHOWS SECTION ===== */
         .shows {
-            background:
-                linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
-                url('images/tembeh-main.png') center/cover fixed;
+            background: var(--green-dark);
             border-top: 2px solid var(--brown-light);
             border-bottom: 2px solid var(--brown-light);
             color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shows::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/tembeh-main.png') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .shows > * {
+            position: relative;
+            z-index: 1;
         }
 
         .shows .section-title,
@@ -671,24 +691,23 @@
                 border-width: 4px;
             }
 
+            .hero-image-wrap {
+                overflow: visible;
+            }
+
             .hero-flower-left {
-                left: -15%;
-                width: 70px;
+                left: -10%;
+                width: 60px;
             }
 
             .hero-flower-right {
-                right: -15%;
-                width: 70px;
+                right: -10%;
+                width: 60px;
             }
 
             .hero-image-caption {
                 font-size: 0.75rem;
                 letter-spacing: 0.1em;
-            }
-
-            /* Shows section mobile */
-            .shows {
-                background-attachment: scroll;
             }
 
             .section-title {
@@ -970,21 +989,23 @@
         }
 
         .popup-consent {
-            display: flex;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: auto 1fr;
             gap: 0.5rem;
             text-align: left;
+            align-items: start;
         }
 
         .popup-consent input[type="checkbox"] {
-            margin-top: 0.2rem;
+            margin-top: 0.15rem;
             accent-color: var(--green);
-            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
         }
 
         .popup-consent label {
             font-family: 'Lora', serif;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--brown);
             line-height: 1.4;
         }
