@@ -15,27 +15,74 @@
             overflow: hidden;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .video-container {
             position: relative;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
-        /* Overlay that fades in after video ends */
+        /* Start screen — tap to begin with sound */
+        .start-screen {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 13, 8, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .start-screen.hidden { display: none; }
+
+        .start-title {
+            font-family: 'Rye', cursive;
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            color: #f5edd6;
+            margin-bottom: 0.5rem;
+        }
+
+        .start-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            color: #c4a265;
+            margin-bottom: 2.5rem;
+        }
+
+        .start-btn {
+            font-family: 'Special Elite', cursive;
+            font-size: 1rem;
+            color: rgba(245, 237, 214, 0.8);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border: 2px solid rgba(245, 237, 214, 0.4);
+            padding: 1rem 2.5rem;
+            background: rgba(61, 90, 58, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .start-btn .icon { font-size: 1.3rem; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        /* End overlay */
         .overlay {
             position: absolute;
             inset: 0;
@@ -49,6 +96,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 1.2s ease;
+            z-index: 20;
         }
 
         .overlay.visible {
@@ -118,93 +166,6 @@
             border-color: #f5edd6;
             transform: scale(1.03);
         }
-
-        /* Tap-to-play fallback for mobile autoplay restrictions */
-        .tap-to-play {
-            position: absolute;
-            inset: 0;
-            background: rgba(10, 13, 8, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .tap-to-play.hidden {
-            display: none;
-        }
-
-        .tap-prompt {
-            font-family: 'Special Elite', cursive;
-            font-size: 1rem;
-            color: rgba(245, 237, 214, 0.7);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            border: 1px solid rgba(245, 237, 214, 0.3);
-            padding: 0.8rem 2rem;
-            transition: all 0.3s;
-        }
-
-        .tap-to-play:hover .tap-prompt {
-            color: #f5edd6;
-            border-color: rgba(245, 237, 214, 0.6);
-        }
-
-        /* Sound prompt */
-        .sound-prompt {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: 'Special Elite', cursive;
-            font-size: 0.8rem;
-            color: rgba(245, 237, 214, 0.6);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            padding: 0.5rem 1.2rem;
-            border: 1px solid rgba(245, 237, 214, 0.2);
-            background: rgba(10, 13, 8, 0.5);
-            transition: all 0.3s;
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        .sound-prompt:hover {
-            color: #f5edd6;
-            border-color: rgba(245, 237, 214, 0.5);
-        }
-
-        .sound-prompt.hidden {
-            display: none;
-        }
-
-        .sound-icon {
-            font-size: 1.1rem;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        @media (max-width: 768px) {
-            .sound-prompt {
-                bottom: 3rem;
-                padding: 0.8rem 1.8rem;
-                font-size: 0.9rem;
-                border-width: 2px;
-                border-color: rgba(245, 237, 214, 0.4);
-                background: rgba(10, 13, 8, 0.7);
-            }
-            .sound-icon {
-                font-size: 1.4rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -213,18 +174,17 @@
             <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
         </video>
 
-        <!-- Tap fallback for mobile -->
-        <div class="tap-to-play" id="tapToPlay">
-            <span class="tap-prompt">Tap to Enter</span>
+        <!-- Single start screen — one tap, plays with sound -->
+        <div class="start-screen" id="startScreen">
+            <p class="start-title">TEMBEH</p>
+            <p class="start-subtitle">Songs of the Everglade</p>
+            <div class="start-btn">
+                <span class="icon">&#9654;</span>
+                <span>Play with Sound</span>
+            </div>
         </div>
 
-        <!-- Sound prompt -->
-        <div class="sound-prompt" id="soundPrompt">
-            <span class="sound-icon">🔇</span>
-            <span id="soundText">Tap for sound</span>
-        </div>
-
-        <!-- CTA overlay after video -->
+        <!-- CTA overlay after video ends -->
         <div class="overlay" id="overlay">
             <div class="overlay-stars">✦ ✦ ✦</div>
             <h1 class="overlay-title">TEMBEH</h1>
@@ -237,54 +197,21 @@
     </div>
 
     <script>
-        const video = document.getElementById('promo');
-        const overlay = document.getElementById('overlay');
-        const tapToPlay = document.getElementById('tapToPlay');
-        const soundPrompt = document.getElementById('soundPrompt');
-        const soundText = document.getElementById('soundText');
-        const soundIcon = soundPrompt.querySelector('.sound-icon');
+        var video = document.getElementById('promo');
+        var startScreen = document.getElementById('startScreen');
+        var overlay = document.getElementById('overlay');
 
-        // Always show sound prompt by default (video starts muted)
-        // Always show tap-to-play by default
-        // We'll hide the right one once we know what happened
-
-        // Try to play
-        var playAttempt = video.play();
-
-        if (playAttempt !== undefined) {
-            playAttempt.then(function() {
-                // Autoplay worked (muted) — hide tap, show sound button
-                tapToPlay.classList.add('hidden');
-                soundPrompt.classList.remove('hidden');
-            }).catch(function() {
-                // Autoplay blocked — show tap, hide sound
-                tapToPlay.classList.remove('hidden');
-                soundPrompt.classList.add('hidden');
-            });
-        }
-
-        // Tap to play (when autoplay is blocked)
-        tapToPlay.addEventListener('click', function() {
-            tapToPlay.classList.add('hidden');
+        // One tap: unmute, play from start, hide start screen
+        startScreen.addEventListener('click', function() {
+            startScreen.classList.add('hidden');
             video.muted = false;
             video.currentTime = 0;
             video.play();
         });
 
-        // Tap for sound (when autoplay worked muted)
-        soundPrompt.addEventListener('click', function() {
-            video.muted = false;
-            soundIcon.textContent = '🔊';
-            soundText.textContent = 'Sound on';
-            setTimeout(function() {
-                soundPrompt.classList.add('hidden');
-            }, 1000);
-        });
-
-        // Show overlay when video ends
+        // Show ticket overlay when video ends
         video.addEventListener('ended', function() {
             overlay.classList.add('visible');
-            soundPrompt.classList.add('hidden');
         });
     </script>
 </body>
