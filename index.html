@@ -30,7 +30,10 @@
 
         body {
             font-family: 'Lora', Georgia, serif;
-            background: url('images/paper-bg.jpg') center top / 100% auto repeat;
+            background-color: #ede4cc;
+            background-image: url('images/paper-bg.jpg');
+            background-size: 200% auto;
+            background-repeat: repeat;
             color: var(--brown-dark);
             overflow-x: hidden;
             position: relative;
@@ -227,7 +230,9 @@
 
         /* ===== SHOWS SECTION ===== */
         .shows {
-            background: var(--green-dark);
+            background:
+                linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
+                url('images/tembeh-main.png') center/cover fixed;
             border-top: 2px solid var(--brown-light);
             border-bottom: 2px solid var(--brown-light);
             color: var(--cream);
@@ -235,18 +240,13 @@
             overflow: hidden;
         }
 
-        .shows::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('images/tembeh-main.png') center/cover no-repeat;
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        .shows > * {
-            position: relative;
-            z-index: 1;
+        /* iOS fallback — fixed attachment not supported */
+        @supports (-webkit-touch-callout: none) {
+            .shows {
+                background:
+                    linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
+                    url('images/tembeh-main.png') center/cover scroll;
+            }
         }
 
         .shows .section-title,
