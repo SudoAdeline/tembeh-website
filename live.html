@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TEMBEH — Songs of the Everglade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Rye&family=Special+Elite&family=Lora:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0d08;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Overlay that fades in after video ends */
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 13, 8, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s ease;
+        }
+
+        .overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .overlay-stars {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.9rem;
+            color: #c4a265;
+            letter-spacing: 0.8em;
+            margin-bottom: 1rem;
+        }
+
+        .overlay-title {
+            font-family: 'Abril Fatface', serif;
+            font-size: clamp(2rem, 8vw, 4.5rem);
+            color: #f5edd6;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .overlay-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 3vw, 1.6rem);
+            color: #c4a265;
+            margin-bottom: 0.5rem;
+        }
+
+        .overlay-detail {
+            font-family: 'Lora', serif;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: rgba(245, 237, 214, 0.6);
+            margin-bottom: 0.3rem;
+        }
+
+        .overlay-badge {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.7rem;
+            color: #c4a265;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            border: 1px solid rgba(196, 162, 101, 0.4);
+            padding: 0.3rem 1rem;
+            margin-top: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .overlay-cta {
+            display: inline-block;
+            font-family: 'Rye', cursive;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: #f5edd6;
+            text-decoration: none;
+            border: 2px solid rgba(245, 237, 214, 0.6);
+            padding: 1rem 2.5rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            background: rgba(61, 90, 58, 0.25);
+        }
+
+        .overlay-cta:hover {
+            background: rgba(245, 237, 214, 0.15);
+            border-color: #f5edd6;
+            transform: scale(1.03);
+        }
+
+        /* Tap-to-play fallback for mobile autoplay restrictions */
+        .tap-to-play {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 13, 8, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .tap-to-play.hidden {
+            display: none;
+        }
+
+        .tap-prompt {
+            font-family: 'Special Elite', cursive;
+            font-size: 1rem;
+            color: rgba(245, 237, 214, 0.7);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border: 1px solid rgba(245, 237, 214, 0.3);
+            padding: 0.8rem 2rem;
+            transition: all 0.3s;
+        }
+
+        .tap-to-play:hover .tap-prompt {
+            color: #f5edd6;
+            border-color: rgba(245, 237, 214, 0.6);
+        }
+
+        /* Sound prompt */
+        .sound-prompt {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.8rem;
+            color: rgba(245, 237, 214, 0.6);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid rgba(245, 237, 214, 0.2);
+            background: rgba(10, 13, 8, 0.5);
+            transition: all 0.3s;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .sound-prompt:hover {
+            color: #f5edd6;
+            border-color: rgba(245, 237, 214, 0.5);
+        }
+
+        .sound-prompt.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .sound-icon {
+            font-size: 1.1rem;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="promo" autoplay muted playsinline webkit-playsinline preload="auto">
+            <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
+        </video>
+
+        <!-- Tap fallback for mobile -->
+        <div class="tap-to-play" id="tapToPlay">
+            <span class="tap-prompt">Tap to Enter</span>
+        </div>
+
+        <!-- Sound prompt -->
+        <div class="sound-prompt" id="soundPrompt">
+            <span class="sound-icon">🔇</span>
+            <span id="soundText">Tap for sound</span>
+        </div>
+
+        <!-- CTA overlay after video -->
+        <div class="overlay" id="overlay">
+            <div class="overlay-stars">✦ ✦ ✦</div>
+            <h1 class="overlay-title">TEMBEH</h1>
+            <p class="overlay-subtitle">Songs of the Everglade</p>
+            <p class="overlay-detail">May 30, 2026 · Heidelberg</p>
+            <p class="overlay-detail">Marsilius-Arkaden · 19:30</p>
+            <div class="overlay-badge">One Night Only</div>
+            <a href="https://pretix.eu/tembeh/hd-2026-05/" class="overlay-cta">Find Tickets</a>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('promo');
+        const overlay = document.getElementById('overlay');
+        const tapToPlay = document.getElementById('tapToPlay');
+        const soundPrompt = document.getElementById('soundPrompt');
+        const soundText = document.getElementById('soundText');
+        const soundIcon = soundPrompt.querySelector('.sound-icon');
+
+        function unmute() {
+            video.muted = false;
+            soundIcon.textContent = '🔊';
+            soundText.textContent = 'Sound on';
+            setTimeout(() => soundPrompt.classList.add('hidden'), 1000);
+        }
+
+        // Check if autoplay started
+        video.addEventListener('playing', () => {
+            tapToPlay.classList.add('hidden');
+        });
+
+        // If video hasn't started after a beat, show tap prompt
+        setTimeout(() => {
+            if (video.paused) {
+                tapToPlay.classList.remove('hidden');
+                soundPrompt.classList.add('hidden');
+            }
+        }, 500);
+
+        // Tap-to-play fallback (autoplay blocked)
+        tapToPlay.addEventListener('click', () => {
+            tapToPlay.classList.add('hidden');
+            soundPrompt.classList.add('hidden');
+            video.muted = false;
+            video.currentTime = 0;
+            video.play();
+        });
+
+        // Sound prompt click
+        soundPrompt.addEventListener('click', unmute);
+
+        // Show overlay when video ends
+        video.addEventListener('ended', () => {
+            overlay.classList.add('visible');
+        });
+    </script>
+</body>
+</html>
