@@ -24,10 +24,8 @@
             --paper: #efe6d0;
         }
 
-        html, body {
+        html {
             overflow-x: hidden;
-            width: 100%;
-            max-width: 100vw;
         }
 
         body {
@@ -35,12 +33,18 @@
             background: #ede4cc;
             color: var(--brown-dark);
             position: relative;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         /* Paper texture as fixed layer behind everything */
         .paper-bg {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 0;
             background: #ede4cc url('images/paper-bg.jpg') center/cover no-repeat;
         }
@@ -240,17 +244,30 @@
             color: var(--cream);
             position: relative;
             z-index: 2;
-            background:
-                linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
-                url('images/tembeh-main.png') center/cover;
-            background-attachment: scroll, fixed;
+            overflow: hidden;
         }
 
-        /* iOS: fixed attachment doesn't work, fall back to scroll */
-        @media (hover: none) and (pointer: coarse) {
-            .shows {
-                background-attachment: scroll, scroll;
-            }
+        .shows-bg {
+            position: absolute;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            background: url('images/tembeh-main.png') center/cover no-repeat;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        .shows-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(20, 25, 18, 0.75);
+            z-index: 1;
+        }
+
+        .shows > *:not(.shows-bg):not(.shows-overlay) {
+            position: relative;
+            z-index: 2;
         }
 
         .shows .section-title,
@@ -1083,6 +1100,8 @@
 
     <!-- UPCOMING SHOWS -->
     <section class="shows" id="shows">
+        <div class="shows-bg" id="showsBg"></div>
+        <div class="shows-overlay"></div>
         <div class="section-ornament">— ✦ —</div>
         <h2 class="section-title">Upcoming Shows</h2>
         <p class="section-subtitle">come gather 'round</p>
@@ -1179,6 +1198,26 @@
     </footer>
 
     <script>
+    // Parallax effect for shows background
+    (function() {
+        const showsBg = document.getElementById('showsBg');
+        const shows = document.getElementById('shows');
+
+        function updateParallax() {
+            const rect = shows.getBoundingClientRect();
+            const windowH = window.innerHeight;
+            // Only update when section is in view
+            if (rect.bottom > 0 && rect.top < windowH) {
+                const progress = (windowH - rect.top) / (windowH + rect.height);
+                const offset = (progress - 0.5) * 30;
+                showsBg.style.transform = 'translate3d(0,' + offset + '%,0)';
+            }
+        }
+
+        window.addEventListener('scroll', updateParallax, { passive: true });
+        updateParallax();
+    })();
+
     (function() {
         const STORAGE_KEY = 'tembeh_subscribed';
         const popup = document.getElementById('newsletterPopup');
