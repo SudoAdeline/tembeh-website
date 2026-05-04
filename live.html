@@ -180,9 +180,7 @@
         }
 
         .sound-prompt.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s;
+            display: none;
         }
 
         .sound-icon {
@@ -211,7 +209,7 @@
 </head>
 <body>
     <div class="video-container">
-        <video id="promo" autoplay muted playsinline webkit-playsinline preload="auto">
+        <video id="promo" muted playsinline webkit-playsinline preload="auto">
             <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
         </video>
 
@@ -246,53 +244,47 @@
         const soundText = document.getElementById('soundText');
         const soundIcon = soundPrompt.querySelector('.sound-icon');
 
-        function unmute() {
-            video.muted = false;
-            soundIcon.textContent = '🔊';
-            soundText.textContent = 'Sound on';
-            setTimeout(() => soundPrompt.classList.add('hidden'), 1200);
-        }
+        // Always show sound prompt by default (video starts muted)
+        // Always show tap-to-play by default
+        // We'll hide the right one once we know what happened
 
-        // Hide both initially
-        soundPrompt.classList.add('hidden');
-        tapToPlay.classList.add('hidden');
+        // Try to play
+        var playAttempt = video.play();
 
-        function checkState() {
-            if (!video.paused && video.muted) {
-                // Autoplaying muted — show sound prompt
+        if (playAttempt !== undefined) {
+            playAttempt.then(function() {
+                // Autoplay worked (muted) — hide tap, show sound button
                 tapToPlay.classList.add('hidden');
                 soundPrompt.classList.remove('hidden');
-            } else if (video.paused) {
-                // Autoplay blocked — show tap to play
+            }).catch(function() {
+                // Autoplay blocked — show tap, hide sound
                 tapToPlay.classList.remove('hidden');
                 soundPrompt.classList.add('hidden');
-            }
+            });
         }
 
-        // Check multiple times to catch all mobile timing quirks
-        setTimeout(checkState, 300);
-        setTimeout(checkState, 800);
-        setTimeout(checkState, 1500);
-        video.addEventListener('playing', checkState);
-
-        // Tap-to-play fallback (autoplay fully blocked)
-        tapToPlay.addEventListener('click', () => {
+        // Tap to play (when autoplay is blocked)
+        tapToPlay.addEventListener('click', function() {
             tapToPlay.classList.add('hidden');
             video.muted = false;
             video.currentTime = 0;
             video.play();
-            soundPrompt.classList.add('hidden');
         });
 
-        // Sound prompt click
-        soundPrompt.addEventListener('click', (e) => {
-            e.stopPropagation();
-            unmute();
+        // Tap for sound (when autoplay worked muted)
+        soundPrompt.addEventListener('click', function() {
+            video.muted = false;
+            soundIcon.textContent = '🔊';
+            soundText.textContent = 'Sound on';
+            setTimeout(function() {
+                soundPrompt.classList.add('hidden');
+            }, 1000);
         });
 
         // Show overlay when video ends
-        video.addEventListener('ended', () => {
+        video.addEventListener('ended', function() {
             overlay.classList.add('visible');
+            soundPrompt.classList.add('hidden');
         });
     </script>
 </body>
