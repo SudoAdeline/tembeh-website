@@ -30,6 +30,25 @@
             display: block;
         }
 
+        /* Home link — top left */
+        .home-link {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            z-index: 25;
+            font-family: 'Rye', cursive;
+            font-size: 1.1rem;
+            color: #f5edd6;
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            transition: opacity 0.3s;
+        }
+
+        .home-link:hover {
+            opacity: 0.7;
+        }
+
         /* Tap-to-unmute overlay — covers the whole video */
         .unmute-overlay {
             position: absolute;
@@ -160,6 +179,8 @@
 </head>
 <body>
     <div class="video-container">
+        <a href="/" class="home-link">TEMBEH</a>
+
         <video id="promo" autoplay muted playsinline webkit-playsinline preload="auto">
             <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
         </video>
