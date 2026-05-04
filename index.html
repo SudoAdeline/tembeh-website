@@ -236,17 +236,6 @@
             border-top: 2px solid var(--brown-light);
             border-bottom: 2px solid var(--brown-light);
             color: var(--cream);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* iOS fallback — fixed attachment not supported */
-        @supports (-webkit-touch-callout: none) {
-            .shows {
-                background:
-                    linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
-                    url('images/tembeh-main.png') center/cover scroll;
-            }
         }
 
         .shows .section-title,
@@ -889,7 +878,7 @@
         }
 
         .popup {
-            background: url('images/paper-bg.jpg') center/cover;
+            background: #ede4cc url('images/paper-bg.jpg') center/cover;
             border: 2px solid var(--brown-light);
             max-width: 420px;
             width: 90%;
