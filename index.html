@@ -142,12 +142,40 @@
         }
 
         /* ===== HERO IMAGE ===== */
+        .hero-image-wrap {
+            position: relative;
+            display: inline-block;
+            margin-top: 2.5rem;
+        }
+
         .hero-image {
             width: clamp(280px, 40vw, 500px);
-            margin-top: 2.5rem;
             filter: contrast(1.05) brightness(0.98);
             border: 6px solid var(--cream-dark);
             box-shadow: 0 8px 40px rgba(58, 42, 26, 0.25);
+            display: block;
+        }
+
+        .hero-flower-left {
+            position: absolute;
+            left: -25%;
+            bottom: -5%;
+            width: clamp(80px, 12vw, 160px);
+            transform: rotate(-8deg);
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero-flower-right {
+            position: absolute;
+            right: -25%;
+            bottom: -8%;
+            width: clamp(80px, 12vw, 160px);
+            transform: rotate(6deg);
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .hero-image-caption {
@@ -714,7 +742,11 @@
         <p class="hero-for-fans">
             For the ones who still believe a song can hold the whole sky open.
         </p>
-        <img src="images/tembeh-main.png" alt="Tembeh performing live" class="hero-image">
+        <div class="hero-image-wrap">
+            <img src="images/wildflower-hero-left.png" alt="" class="hero-flower-left">
+            <img src="images/tembeh-main.png" alt="Tembeh performing live" class="hero-image">
+            <img src="images/wildflower-hero-right.png" alt="" class="hero-flower-right">
+        </div>
         <p class="hero-image-caption">✦ one voice, one guitar, one room ✦</p>
     </section>
 
