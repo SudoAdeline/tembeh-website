@@ -788,12 +788,12 @@
             if (e.key === 'Escape') popup.classList.remove('visible');
         });
 
-        popupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        popupForm.addEventListener('submit', function() {
             markSubscribed();
             popupForm.style.display = 'none';
             popupSuccess.style.display = 'block';
             setTimeout(function() { popup.classList.remove('visible'); }, 2500);
+            // Form submits normally to Mailchimp via target="_blank"
         });
     })();
     </script>
