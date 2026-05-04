@@ -30,50 +30,46 @@
             display: block;
         }
 
-        /* Sound toggle button — always on screen during video */
-        .sound-btn {
+        /* Tap-to-unmute overlay — covers the whole video */
+        .unmute-overlay {
             position: absolute;
-            bottom: 2rem;
-            right: 1.5rem;
-            z-index: 15;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid rgba(245, 237, 214, 0.5);
-            background: rgba(10, 13, 8, 0.6);
-            color: #f5edd6;
-            font-size: 1.3rem;
+            inset: 0;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
-            transition: all 0.2s;
         }
 
-        .sound-btn:active {
-            transform: scale(0.9);
+        .unmute-overlay.hidden { display: none; }
+
+        .unmute-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid rgba(245, 237, 214, 0.6);
+            background: rgba(10, 13, 8, 0.5);
+            color: #f5edd6;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-unmute 2s ease-in-out infinite;
         }
 
-        .sound-btn.hidden { display: none; }
+        @keyframes pulse-unmute {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.08); }
+        }
 
-        /* Hint label next to button */
-        .sound-hint {
+        .unmute-label {
             position: absolute;
-            bottom: 2.4rem;
-            right: 4.5rem;
-            z-index: 15;
+            bottom: 30%;
             font-family: 'Special Elite', cursive;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: rgba(245, 237, 214, 0.7);
-            letter-spacing: 0.1em;
-            white-space: nowrap;
-            animation: fade-hint 4s ease forwards;
-        }
-
-        @keyframes fade-hint {
-            0%, 60% { opacity: 1; }
-            100% { opacity: 0; pointer-events: none; }
+            letter-spacing: 0.15em;
         }
 
         /* End overlay */
@@ -168,9 +164,11 @@
             <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
         </video>
 
-        <!-- Sound toggle on the video -->
-        <span class="sound-hint" id="soundHint">tap for sound</span>
-        <button class="sound-btn" id="soundBtn">🔇</button>
+        <!-- Tap anywhere on the video to unmute — big center icon -->
+        <div class="unmute-overlay" id="unmuteOverlay">
+            <div class="unmute-icon">🔇</div>
+            <span class="unmute-label">tap for sound</span>
+        </div>
 
         <!-- CTA overlay after video ends -->
         <div class="overlay" id="overlay">
@@ -186,34 +184,20 @@
 
     <script>
         var video = document.getElementById('promo');
-        var soundBtn = document.getElementById('soundBtn');
-        var soundHint = document.getElementById('soundHint');
+        var unmuteOverlay = document.getElementById('unmuteOverlay');
         var overlay = document.getElementById('overlay');
 
-        // Toggle mute on button tap — must call play() again on iOS after unmuting
-        soundBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (video.muted) {
-                video.muted = false;
-                video.play().catch(function(){});
-                soundBtn.textContent = '🔊';
-            } else {
-                video.muted = true;
-                soundBtn.textContent = '🔇';
-            }
+        // Tap anywhere on the unmute overlay to unmute and play with sound
+        unmuteOverlay.addEventListener('click', function() {
+            video.muted = false;
+            video.play().catch(function(){});
+            unmuteOverlay.classList.add('hidden');
         });
 
-        // Also listen for touchend in case click doesn't fire on some mobile browsers
-        soundBtn.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            soundBtn.click();
-        });
-
-        // Hide button when video ends, show overlay
+        // Hide unmute overlay when video ends, show end overlay
         video.addEventListener('ended', function() {
             overlay.classList.add('visible');
-            soundBtn.classList.add('hidden');
+            unmuteOverlay.classList.add('hidden');
         });
     </script>
 </body>
