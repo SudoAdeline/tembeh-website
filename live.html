@@ -190,15 +190,24 @@
         var soundHint = document.getElementById('soundHint');
         var overlay = document.getElementById('overlay');
 
-        // Toggle mute on button tap
-        soundBtn.addEventListener('click', function() {
+        // Toggle mute on button tap — must call play() again on iOS after unmuting
+        soundBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             if (video.muted) {
                 video.muted = false;
+                video.play().catch(function(){});
                 soundBtn.textContent = '🔊';
             } else {
                 video.muted = true;
                 soundBtn.textContent = '🔇';
             }
+        });
+
+        // Also listen for touchend in case click doesn't fire on some mobile browsers
+        soundBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            soundBtn.click();
         });
 
         // Hide button when video ends, show overlay
