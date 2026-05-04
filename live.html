@@ -6,7 +6,7 @@
     <title>TEMBEH — Songs of the Everglade</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Rye&family=Special+Elite&family=Lora:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -30,56 +30,50 @@
             display: block;
         }
 
-        /* Start screen — tap to begin with sound */
-        .start-screen {
+        /* Sound toggle button — always on screen during video */
+        .sound-btn {
             position: absolute;
-            inset: 0;
-            background: rgba(10, 13, 8, 0.8);
+            bottom: 2rem;
+            right: 1.5rem;
+            z-index: 15;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(245, 237, 214, 0.5);
+            background: rgba(10, 13, 8, 0.6);
+            color: #f5edd6;
+            font-size: 1.3rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 10;
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.2s;
         }
 
-        .start-screen.hidden { display: none; }
-
-        .start-title {
-            font-family: 'Rye', cursive;
-            font-size: clamp(1.8rem, 6vw, 3rem);
-            color: #f5edd6;
-            margin-bottom: 0.5rem;
+        .sound-btn:active {
+            transform: scale(0.9);
         }
 
-        .start-subtitle {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-            color: #c4a265;
-            margin-bottom: 2.5rem;
-        }
+        .sound-btn.hidden { display: none; }
 
-        .start-btn {
+        /* Hint label next to button */
+        .sound-hint {
+            position: absolute;
+            bottom: 2.4rem;
+            right: 4.5rem;
+            z-index: 15;
             font-family: 'Special Elite', cursive;
-            font-size: 1rem;
-            color: rgba(245, 237, 214, 0.8);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            border: 2px solid rgba(245, 237, 214, 0.4);
-            padding: 1rem 2.5rem;
-            background: rgba(61, 90, 58, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 0.75rem;
+            color: rgba(245, 237, 214, 0.7);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+            animation: fade-hint 4s ease forwards;
         }
 
-        .start-btn .icon { font-size: 1.3rem; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.03); }
+        @keyframes fade-hint {
+            0%, 60% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
         }
 
         /* End overlay */
@@ -170,19 +164,13 @@
 </head>
 <body>
     <div class="video-container">
-        <video id="promo" muted playsinline webkit-playsinline preload="auto">
+        <video id="promo" autoplay muted playsinline webkit-playsinline preload="auto">
             <source src="images/everglade-promo.mp4?v=2" type="video/mp4">
         </video>
 
-        <!-- Single start screen — one tap, plays with sound -->
-        <div class="start-screen" id="startScreen">
-            <p class="start-title">TEMBEH</p>
-            <p class="start-subtitle">Songs of the Everglade</p>
-            <div class="start-btn">
-                <span class="icon">&#9654;</span>
-                <span>Play with Sound</span>
-            </div>
-        </div>
+        <!-- Sound toggle on the video -->
+        <span class="sound-hint" id="soundHint">tap for sound</span>
+        <button class="sound-btn" id="soundBtn">🔇</button>
 
         <!-- CTA overlay after video ends -->
         <div class="overlay" id="overlay">
@@ -198,20 +186,25 @@
 
     <script>
         var video = document.getElementById('promo');
-        var startScreen = document.getElementById('startScreen');
+        var soundBtn = document.getElementById('soundBtn');
+        var soundHint = document.getElementById('soundHint');
         var overlay = document.getElementById('overlay');
 
-        // One tap: unmute, play from start, hide start screen
-        startScreen.addEventListener('click', function() {
-            startScreen.classList.add('hidden');
-            video.muted = false;
-            video.currentTime = 0;
-            video.play();
+        // Toggle mute on button tap
+        soundBtn.addEventListener('click', function() {
+            if (video.muted) {
+                video.muted = false;
+                soundBtn.textContent = '🔊';
+            } else {
+                video.muted = true;
+                soundBtn.textContent = '🔇';
+            }
         });
 
-        // Show ticket overlay when video ends
+        // Hide button when video ends, show overlay
         video.addEventListener('ended', function() {
             overlay.classList.add('visible');
+            soundBtn.classList.add('hidden');
         });
     </script>
 </body>
