@@ -41,7 +41,7 @@
         .paper-bg {
             position: fixed;
             inset: 0;
-            z-index: -1;
+            z-index: 0;
             background: #ede4cc url('images/paper-bg.jpg') center/cover no-repeat;
         }
 
@@ -86,6 +86,7 @@
             padding: 2rem;
             position: relative;
             overflow: hidden;
+            z-index: 1;
             background: transparent;
         }
 
@@ -203,6 +204,7 @@
         section {
             position: relative;
             padding: 5rem 2rem;
+            z-index: 1;
         }
 
         .section-ornament {
@@ -237,27 +239,18 @@
             border-bottom: 2px solid var(--brown-light);
             color: var(--cream);
             position: relative;
-            overflow: hidden;
-            z-index: 1;
+            z-index: 2;
+            background:
+                linear-gradient(rgba(20, 25, 18, 0.75), rgba(20, 25, 18, 0.75)),
+                url('images/tembeh-main.png') center/cover;
+            background-attachment: scroll, fixed;
         }
 
-        .shows::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('images/tembeh-main.png') center/cover no-repeat;
-            z-index: -2;
-        }
-
-        .shows::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(20, 25, 18, 0.75);
-            z-index: -1;
+        /* iOS: fixed attachment doesn't work, fall back to scroll */
+        @media (hover: none) and (pointer: coarse) {
+            .shows {
+                background-attachment: scroll, scroll;
+            }
         }
 
         .shows .section-title,
@@ -440,6 +433,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            z-index: 1;
         }
 
         .quote-strip::before {
@@ -571,6 +565,7 @@
             text-align: center;
             padding: 3rem 2rem;
             position: relative;
+            z-index: 1;
         }
 
         .footer-name {
