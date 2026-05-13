@@ -414,6 +414,128 @@
 
         .footer-legal a:hover { color: var(--cream); }
 
+        /* ===== NEWSLETTER SECTION ===== */
+        .newsletter-section {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(196, 162, 101, 0.12);
+            border-bottom: 1px solid rgba(196, 162, 101, 0.12);
+            background: linear-gradient(180deg, #0a0d08 0%, rgba(45, 58, 42, 0.15) 50%, #0a0d08 100%);
+        }
+
+        .newsletter-ornament {
+            font-size: 0.85rem;
+            color: var(--brown-light);
+            letter-spacing: 0.3em;
+            margin-bottom: 1.2rem;
+        }
+
+        .newsletter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--cream);
+            margin-bottom: 0.8rem;
+        }
+
+        .newsletter-text {
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            color: var(--cream-dark);
+            max-width: 460px;
+            margin: 0 auto 1.8rem;
+            line-height: 1.7;
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input[type="text"],
+        .newsletter-form input[type="email"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-family: 'Lora', serif;
+            font-size: 0.9rem;
+            color: var(--cream);
+            background: rgba(245, 237, 214, 0.06);
+            border: 1px solid rgba(196, 162, 101, 0.25);
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .newsletter-form input[type="text"]:focus,
+        .newsletter-form input[type="email"]:focus {
+            border-color: var(--brown-light);
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(232, 220, 196, 0.4);
+        }
+
+        .newsletter-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            text-align: left;
+            margin: 0.4rem 0;
+        }
+
+        .newsletter-consent input[type="checkbox"] {
+            margin-top: 0.25rem;
+            accent-color: var(--brown-light);
+            flex-shrink: 0;
+        }
+
+        .newsletter-consent label {
+            font-family: 'Lora', serif;
+            font-size: 0.75rem;
+            color: rgba(232, 220, 196, 0.55);
+            line-height: 1.5;
+        }
+
+        .newsletter-consent label a {
+            color: var(--brown-light);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .newsletter-form button {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #1a1a12;
+            background: var(--brown-light);
+            border: none;
+            border-radius: 4px;
+            padding: 0.8rem 2.5rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 0.4rem;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--cream);
+            transform: translateY(-1px);
+        }
+
+        .newsletter-success {
+            display: none;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--brown-light);
+            margin-top: 1rem;
+        }
+
         /* ===== NEWSLETTER POPUP ===== */
         .popup-backdrop {
             position: fixed;
@@ -614,6 +736,8 @@
 
             .footer-socials { flex-wrap: wrap; gap: 1rem 1.5rem; }
             .footer-legal { flex-wrap: wrap; gap: 0.8rem; }
+            .newsletter-section { padding: 3rem 1.5rem; }
+            .newsletter-form { max-width: 100%; }
 
             .popup { padding: 2rem 1.5rem; max-width: 340px; }
             .popup-title { font-size: 1.3rem; }
@@ -711,15 +835,33 @@
         </div>
     </section>
 
+    <!-- NEWSLETTER SECTION -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="newsletter-ornament">— ✦ —</div>
+        <h2 class="newsletter-title">Stay in the Loop</h2>
+        <p class="newsletter-text">Drop your email for monthly updates — tour dates, new music, and stories from the road.</p>
+        <form class="newsletter-form" id="newsletterForm" action="https://world.us6.list-manage.com/subscribe/post?u=94342f5b090356433d135403a&amp;id=35b5292048&amp;f_id=009ec2e1f0" method="post" target="_blank">
+            <input type="text" name="FNAME" placeholder="Your name">
+            <input type="email" name="EMAIL" placeholder="Your email" required>
+            <div aria-hidden="true" style="position:absolute;left:-5000px;"><input type="text" name="b_94342f5b090356433d135403a_35b5292048" tabindex="-1" value=""></div>
+            <div class="newsletter-consent">
+                <input type="checkbox" id="newsletterConsent" required>
+                <label for="newsletterConsent">I agree to receive emails from Tembeh. You can unsubscribe at any time. View the <a href="privacy.html">Privacy Policy</a>.</label>
+            </div>
+            <button type="submit">Keep in Touch</button>
+        </form>
+        <p class="newsletter-success" id="newsletterSuccess">You're in. See you on the road. ✦</p>
+    </section>
+
     <!-- FOOTER -->
     <footer>
         <p class="footer-name">TEMBEH</p>
         <p class="footer-tagline">cinematic folk for the wide open</p>
         <div class="footer-socials">
-            <a href="https://tembeh.bandcamp.com/track/everglade" target="_blank">Bandcamp</a>
             <a href="https://www.instagram.com/tembeh.world/" target="_blank">Instagram</a>
             <a href="https://open.spotify.com/artist/4s9JmadJjVdYQ6YxYtJgja" target="_blank">Spotify</a>
             <a href="https://www.youtube.com/@tembehworld" target="_blank">YouTube</a>
+            <a href="https://tembeh.bandcamp.com/" target="_blank">Bandcamp</a>
         </div>
         <p class="footer-booking">Booking & Press: <a href="mailto:hello@tembeh.world">hello@tembeh.world</a></p>
         <p class="footer-copy">✦ 2026 ✦</p>
@@ -794,6 +936,17 @@
             popupSuccess.style.display = 'block';
             setTimeout(function() { popup.classList.remove('visible'); }, 2500);
             // Form submits normally to Mailchimp via target="_blank"
+        });
+    })();
+
+    // Inline newsletter form
+    (function() {
+        var form = document.getElementById('newsletterForm');
+        var success = document.getElementById('newsletterSuccess');
+        form.addEventListener('submit', function() {
+            localStorage.setItem('tembeh_subscribed', 'true');
+            form.style.display = 'none';
+            success.style.display = 'block';
         });
     })();
     </script>
