@@ -116,6 +116,9 @@ img{display:block;max-width:100%}
 .form textarea{height:150px;resize:vertical}
 .form input:focus,.form textarea:focus{outline:none;border-color:var(--night)}
 .form .btn{justify-self:start}
+.send-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.form-note{margin:0;font-size:15px;color:var(--ink-muted)}
+.form .btn:disabled{opacity:.6;cursor:wait}
 
 /* NEWSLETTER */
 .nl-section{padding:130px var(--pad);display:flex;flex-direction:column;align-items:center;gap:28px;text-align:center}
@@ -190,7 +193,7 @@ img{display:block;max-width:100%}
   .contact-img{height:440px;order:2}
   .contact-body{gap:28px}
   .form{grid-template-columns:1fr}
-  .form .btn{justify-self:stretch}
+  .send-row .btn{width:100%}
   .nl-section{padding:72px var(--pad)}
   .nl-row{flex-direction:column}
   .footer{flex-direction:column;padding:56px var(--pad)}
@@ -303,7 +306,8 @@ img{display:block;max-width:100%}
       <label>Name<input type="text" name="name" autocomplete="name" required></label>
       <label>Email<input type="email" name="email" autocomplete="email" required></label>
       <label class="full">Message<textarea name="message" required></textarea></label>
-      <button class="btn btn-dark" type="submit">Send</button>
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-5000px">
+      <div class="full send-row"><button class="btn btn-dark" type="submit">Send</button><p class="form-note" id="contact-note" role="status"></p></div>
     </form>
   </div>
 </section>
@@ -311,7 +315,7 @@ img{display:block;max-width:100%}
 <section class="nl-section" id="circle">
   <div class="stars" aria-hidden="true">✦ ✦ ✦</div>
   <h2>Join the <em>circle</em></h2>
-  <p>Shows, new songs and stories from the road, straight to your inbox once a month.</p>
+  <p>Shows, new songs and stories from the road, straight to your inbox.</p>
   <form class="nl" id="nl-form" action="https://world.us6.list-manage.com/subscribe/post?u=94342f5b090356433d135403a&amp;id=35b5292048&amp;f_id=009ec2e1f0" method="post" target="_blank">
     <div class="nl-row">
       <label class="sr" for="nl-email">Email address</label>
@@ -365,11 +369,23 @@ img{display:block;max-width:100%}
     document.getElementById('next-where').textContent=wd+' '+d.getDate()+' '+mo+' · '+g.querySelector('.city').textContent+', '+g.querySelector('.venue').textContent.split(' · ')[0];
   } else if(next){ next.style.display='none'; }
 
-  // contact form opens the visitor's email app with everything filled in
-  document.getElementById('contact-form').addEventListener('submit',function(e){
-    e.preventDefault();var f=e.target;
-    var body=f.message.value+'\n\n'+f.name.value+'\n'+f.email.value;
-    location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Booking / press: '+f.name.value)+'&body='+encodeURIComponent(body);
+  // contact form sends straight to the inbox via FormSubmit
+  var cf=document.getElementById('contact-form'),note=document.getElementById('contact-note');
+  cf.addEventListener('submit',function(e){
+    e.preventDefault();
+    var el=function(n){return cf.elements.namedItem(n).value;};var b=cf.querySelector('button[type=submit]');b.disabled=true;b.textContent='Sending';note.textContent='';
+    fetch('https://formsubmit.co/ajax/'+MAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({name:el('name'),email:el('email'),message:el('message'),_replyto:el('email'),_subject:'Website message from '+el('name'),_template:'table',_honey:el('_honey')})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success==='false'||d.success===false){throw new Error();}
+      cf.reset();b.textContent='Sent';note.textContent='Thank you. Your message is on its way.';
+      setTimeout(function(){b.disabled=false;b.textContent='Send';},4000);
+    })
+    .catch(function(){
+      b.disabled=false;b.textContent='Send';
+      note.innerHTML='That didn\u2019t go through. Please email <a href="mailto:'+MAIL+'" style="text-decoration:underline">'+MAIL+'</a> directly.';
+    });
   });
   // newsletter posts to Mailchimp in a new tab; confirm here
   document.getElementById('nl-form').addEventListener('submit',function(){
