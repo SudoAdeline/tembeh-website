@@ -8,7 +8,7 @@
 <meta name="description" content="Tembeh: music, upcoming shows and booking.">
 <meta property="og:title" content="Tembeh">
 <meta property="og:description" content="Music, upcoming shows and booking.">
-<meta property="og:image" content="https://tembeh.world/images/field.jpg">
+<meta property="og:image" content="https://tembeh.world/field.jpg">
 <meta property="og:url" content="https://tembeh.world/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -202,7 +202,7 @@ img{display:block;max-width:100%}
 <body>
 
 <header class="hero" id="top">
-  <div class="hero-img"><img src="images/field.jpg" alt="Tembeh in white, standing in a cornfield under the moon" width="1200" height="1800" fetchpriority="high"></div>
+  <div class="hero-img"><img src="field.jpg" alt="Tembeh in white, standing in a cornfield under the moon" width="1200" height="1800" fetchpriority="high"></div>
   <nav class="nav" id="nav" aria-label="Main">
     <a href="#top" class="logo">TEMBEH</a>
     <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
@@ -216,7 +216,7 @@ img{display:block;max-width:100%}
     </div>
   </nav>
   <div class="hero-body">
-    <p class="hero-kicker">Singer · Songwriter · Guitar</p>
+    <p class="hero-kicker">Singer-Songwriter · Producer</p>
     <h1>TEMBEH</h1>
     <div class="hero-ctas">
       <a class="btn btn-red" href="https://open.spotify.com/artist/4s9JmadJjVdYQ6YxYtJgja" target="_blank" rel="noopener">Listen now
@@ -235,7 +235,7 @@ img{display:block;max-width:100%}
 
 <main>
 <section class="music" id="music">
-  <img class="music-img" src="images/guitar.jpg" alt="Tembeh playing a red classical guitar at dusk" width="1200" height="1800" loading="lazy">
+  <img class="music-img" src="guitar.jpg" alt="Tembeh playing a red classical guitar at dusk" width="1200" height="1800" loading="lazy">
   <div class="music-body">
     <h2 class="display">LISTEN</h2>
     <ul class="platforms">
@@ -292,7 +292,7 @@ img{display:block;max-width:100%}
 </section>
 
 <section class="contact" id="contact">
-  <img class="contact-img" src="images/walk.jpg" alt="Tembeh walking away at night, carrying a red guitar" width="690" height="1945" loading="lazy">
+  <img class="contact-img" src="walk.jpg" alt="Tembeh walking away at night, carrying a red guitar" width="690" height="1945" loading="lazy">
   <div class="contact-body">
     <h2 class="display">CONTACT</h2>
     <div class="mail">
@@ -312,12 +312,13 @@ img{display:block;max-width:100%}
   <div class="stars" aria-hidden="true">✦ ✦ ✦</div>
   <h2>Join the <em>circle</em></h2>
   <p>Shows, new songs and stories from the road, straight to your inbox once a month.</p>
-  <form class="nl" id="nl-form">
+  <form class="nl" id="nl-form" action="https://world.us6.list-manage.com/subscribe/post?u=94342f5b090356433d135403a&amp;id=35b5292048&amp;f_id=009ec2e1f0" method="post" target="_blank">
     <div class="nl-row">
       <label class="sr" for="nl-email">Email address</label>
-      <input id="nl-email" type="email" name="email" placeholder="Your email" autocomplete="email" required>
+      <input id="nl-email" type="email" name="EMAIL" placeholder="Your email" autocomplete="email" required>
       <button class="btn btn-red" type="submit">Join</button>
     </div>
+    <div aria-hidden="true" style="position:absolute;left:-5000px;"><input type="text" name="b_94342f5b090356433d135403a_35b5292048" tabindex="-1" value=""></div>
     <label class="consent"><input type="checkbox" name="consent" required><span>I agree to receive emails from Tembeh and accept the <a href="/privacy.html">privacy policy</a>.</span></label>
     <p class="note" id="nl-note" role="status"></p>
   </form>
@@ -370,11 +371,9 @@ img{display:block;max-width:100%}
     var body=f.message.value+'\n\n'+f.name.value+'\n'+f.email.value;
     location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Booking / press: '+f.name.value)+'&body='+encodeURIComponent(body);
   });
-  // newsletter: until a newsletter service is connected, sends a signup email
-  document.getElementById('nl-form').addEventListener('submit',function(e){
-    e.preventDefault();var f=e.target;
-    location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Join the circle')+'&body='+encodeURIComponent('Please add me to the newsletter: '+f.email.value);
-    document.getElementById('nl-note').textContent='Your email app should open. Hit send and you’re in.';
+  // newsletter posts to Mailchimp in a new tab; confirm here
+  document.getElementById('nl-form').addEventListener('submit',function(){
+    document.getElementById('nl-note').textContent='Almost done. Confirm in the Mailchimp tab that just opened.';
   });
 })();
 </script>
